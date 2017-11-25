@@ -84,10 +84,12 @@ def train():
         target_list.append(word_index)
         x=get_hidden(index)
         e=np.zeros([embedding_size,1])
-        for u in target_list:
+        labels=np.zeros([2*window,1])
+        labels=np.append(labels, 1)
+        for u_index,u in enumerate(target_list):
             theta_u = weights[u]
             q_target=sigmoid_single(np.dot(x.T, theta_u))
-            g=learning_rate*q_target
+            g=learning_rate*(labels[u_index]-q_target)
             e=np.add(e, g*theta_u)
             weights[u]=np.add(theta_u, g*x)
 
@@ -98,6 +100,4 @@ def train():
 
 
 if __name__=='__main__':
-    # print get_negative_samples(5, 3, 20)
-    arr = np.array([1,2,3,5])
-    print arr[[0,3]]
+    train()
